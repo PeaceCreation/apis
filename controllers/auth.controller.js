@@ -1,4 +1,6 @@
 // import { bcrypt} from 'bcrypt';
+import { generateToken } from '../utils/helpers.js';
+import { User } from '../models/index.js';
 
 export async function register(req, res){
     const { username, email } = req.body;  // ✅ Extracting username instead of name
@@ -35,3 +37,28 @@ export async function register(req, res){
     }
 }
 
+// login function 
+
+export async function login(req, res){
+    // test if user exist in db
+    const user = await User.findOne({where: { email: req.body.email}})
+    // return error if user not in db
+    if(!user){
+        res.status(404).json({
+            message: 'In Valide Data',
+        })
+
+    }
+
+    // if user in db 
+
+
+
+    // generate token 
+    const token = generateToken(user.id);
+
+    res.json({
+        token,
+        
+    })
+}
